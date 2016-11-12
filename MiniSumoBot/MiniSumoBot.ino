@@ -34,10 +34,10 @@ D12 DIR_LATCH
 //Configuration Section
 int LINESENSOR = A0;
 int FRONTSENSOR = A3;
-int LINESENSE = 300; //value when over white edge line
+int LINESENSE = 900; //value when over white edge line
 int MIN_DISTANCE = 400; //4 cm to enemy bot
 int MINSPEED = 80;
-int NORMALSPEED = 90;
+int NORMALSPEED = 120;
 int MAXSPEED = 255;
 
 AF_DCMotor motor1(1, MOTOR12_64KHZ);
@@ -52,7 +52,16 @@ void setup()
 	Serial.begin(9600);
 	
 	Serial.begin(9600);           // set up Serial library at 9600 bps
-	Serial.println("Motor test!");
+	Serial.println("Sumo bot online and ready!");
+
+  //internation sumo bot rules dictate that we wait 5 seconds
+  // before starting.
+  wait(5);
+}
+
+void wait(int numSecondsToWait)
+{
+  delay(numSecondsToWait * 1000);
 }
 
 void loop()
@@ -71,8 +80,8 @@ void loop()
 		fullStop();
 		delay(100);
 		goReverse(NORMALSPEED);
-		delay(1000);
-		turnRight(NORMALSPEED);
+		delay(800);
+		turnLeft(NORMALSPEED);
 		delay(1000);
 	}
 	else if (frontValue > MIN_DISTANCE)
@@ -117,3 +126,13 @@ void turnRight(int speed)
 	motor1.run(BACKWARD);
 	motor2.run(FORWARD);
 }
+
+void turnLeft(int speed)
+{
+  //speed is 0-255
+  motor1.setSpeed(speed);
+  motor2.setSpeed(speed);
+  motor1.run(FORWARD);  
+  motor2.run(BACKWARD);
+}
+
